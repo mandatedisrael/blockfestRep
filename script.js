@@ -62,14 +62,9 @@ function setupEventListeners() {
     }
 
     const nameInput = document.getElementById('name');
-    const roleInput = document.getElementById('role');
     
     if (nameInput) {
         nameInput.addEventListener('input', updatePreview);
-    }
-    
-    if (roleInput) {
-        roleInput.addEventListener('change', updatePreview);
     }
 }
 
@@ -140,11 +135,9 @@ function handlePhotoUpload(event) {
 
 function updatePreview() {
     const name = document.getElementById('name').value.trim();
-    const role = document.getElementById('role').value;
     
     currentGraphic = {
         name: name || 'Your Name',
-        role: role || 'attendee',
         photo: userPhotoData
     };
     
@@ -153,7 +146,6 @@ function updatePreview() {
 
 function generateAndDownload() {
     const name = document.getElementById('name').value.trim();
-    const role = document.getElementById('role').value;
     const photoFile = document.getElementById('photo').files[0];
     
     if (!name) {
@@ -164,7 +156,6 @@ function generateAndDownload() {
     
     currentGraphic = {
         name: name,
-        role: role,
         photo: userPhotoData
     };
     
@@ -173,16 +164,8 @@ function generateAndDownload() {
     generateBadgeWithTemplate();
 }
 
-function getTemplatePath(role) {
-    switch(role) {
-        case 'speaker':
-            return 'assets/Speaker.jpg';
-        case 'team':
-            return 'assets/Team.jpg';
-        case 'attendee':
-        default:
-            return 'assets/Attendee.jpg';
-    }
+function getTemplatePath() {
+    return 'assets/Attendee.jpg';
 }
 
 function generateBadgeWithTemplate() {
@@ -226,7 +209,7 @@ function generateBadgeWithTemplate() {
             generateBtn.disabled = false;
         };
         
-        const templatePath = getTemplatePath(currentGraphic.role);
+        const templatePath = getTemplatePath();
         templateImg.src = templatePath;
         
     } catch (error) {
@@ -309,12 +292,8 @@ function drawUserPhoto(ctx, userImg) {
 function drawUserText(ctx) {
     const nameConfig = TEMPLATE_CONFIG.userName;
     
-    // Set text color based on role
-    if (currentGraphic.role === 'speaker') {
-        ctx.fillStyle = '#FFFFFF'; // White for Speaker
-    } else {
-        ctx.fillStyle = '#000000'; // Black for Attendee and Team
-    }
+    // Set text color to black for the default template
+    ctx.fillStyle = '#000000';
     
     // Wait for fonts to be ready before rendering
     document.fonts.ready.then(() => {
@@ -407,12 +386,6 @@ function clearAllInputs() {
         const nameInput = document.getElementById('name');
         if (nameInput) {
             nameInput.value = '';
-        }
-        
-        // Reset role selection to default
-        const roleSelect = document.getElementById('role');
-        if (roleSelect) {
-            roleSelect.value = 'attendee';
         }
         
         // Clear photo input and preview
