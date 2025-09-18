@@ -9,7 +9,7 @@
     <title>Blockfest Africa 2025 - Badge Generator</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
@@ -17,7 +17,9 @@
     <!-- Logo at Top -->
     <div class="logo-container">
         <img src="assets/logoText.png" alt="Blockfest Africa 2025" class="logo-text">
-        </div>
+        <div class="brand-subtitle">BLOCKF3ST AFRICA 2025</div>
+        <div class="event-date">11th OCT, 2025 • Victoria Island, Lagos</div>
+    </div>
 
     <!-- Main Form -->
     <div class="form-container">
@@ -31,8 +33,7 @@
                     <select id="role" required>
                             <option value="attendee">Attendee</option>
                             <option value="speaker">Speaker</option>
-                            <option value="sponsor">Sponsor</option>
-                            <option value="volunteer">Volunteer</option>
+                            <option value="team">Team</option>
                         </select>
                     </div>
                     
@@ -51,6 +52,10 @@
                             <i class="fas fa-download"></i>
                     Generate My Badge
                         </button>
+                        
+                        <div class="form-footer">
+                            <div class="built-with-love">Built with ❤️ by the ZerØPulse team</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -58,7 +63,7 @@
     <!-- Hidden Badge for Generation -->
     <div class="hidden-badge" id="hidden-badge">
         <div class="template-container">
-            <img src="assets/template.jpg" alt="Blockfest Template" class="template-image" id="template-image">
+            <img src="assets/Attendee.jpg" alt="Blockfest Template" class="template-image" id="template-image">
             
             <!-- User Photo Overlay -->
             <div class="user-photo-overlay" id="user-photo-overlay">
@@ -78,6 +83,14 @@
             </div>
         </div>
                     </div>
+
+    <!-- Decorative Elements -->
+    <div class="decorative-elements">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+    </div>
 
     <!-- Footer Pattern -->
     <div class="footer-pattern">

@@ -4,20 +4,20 @@ let userPhotoData = null;
 
 const TEMPLATE_CONFIG = {
     userPhoto: {
-        x: 310,       
-        y: 767,        
-        width: 350,    
-        height: 400,   
+        x: 180,       
+        y: 395,        
+        width: 450,    
+        height: 450,   
         style: 'rounded', 
         borderRadius: 30
     },
     userName: {
-        x: 740,        
-        y: 940,        
-        font: 'bold 55px Poppins',
+        x: 175,        
+        y: 970,        
+        font: 'bold 80px Bebas Neue',
         color: '#000000',
         align: 'left',
-        maxWidth: 400,
+        maxWidth: 800,
         maxHeight: 120,
         lineHeight: 65
     },
@@ -31,7 +31,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function initializeApp() {
     setupFileUpload();
+    preloadFonts();
     console.log('✅ Badge generator initialized');
+}
+
+function preloadFonts() {
+    // Preload Bebas Neue font to ensure it's available for canvas rendering
+    const fontLink = document.createElement('link');
+    fontLink.rel = 'preload';
+    fontLink.as = 'font';
+    fontLink.type = 'font/woff2';
+    fontLink.crossOrigin = 'anonymous';
+    fontLink.href = 'https://fonts.gstatic.com/s/bebasneue/v14/JTUSjIg69CK48gW7PXoo9Wlhyw.woff2';
+    document.head.appendChild(fontLink);
+    
+    // Also try to load the font programmatically
+    const font = new FontFace('Bebas Neue', 'url(https://fonts.gstatic.com/s/bebasneue/v14/JTUSjIg69CK48gW7PXoo9Wlhyw.woff2)');
+    font.load().then(() => {
+        document.fonts.add(font);
+        console.log('✅ Bebas Neue font loaded successfully');
+    }).catch((error) => {
+        console.warn('⚠️ Could not load Bebas Neue font:', error);
+    });
 }
 
 function setupEventListeners() {
@@ -152,6 +173,18 @@ function generateAndDownload() {
     generateBadgeWithTemplate();
 }
 
+function getTemplatePath(role) {
+    switch(role) {
+        case 'speaker':
+            return 'assets/Speaker.jpg';
+        case 'team':
+            return 'assets/Team.jpg';
+        case 'attendee':
+        default:
+            return 'assets/Attendee.jpg';
+    }
+}
+
 function generateBadgeWithTemplate() {
     const generateBtn = document.querySelector('.generate-btn');
     const originalText = generateBtn.innerHTML;
@@ -187,13 +220,14 @@ function generateBadgeWithTemplate() {
         
         templateImg.onerror = function() {
             console.error('Failed to load template image');
-            alert('Failed to load template. Please check if assets/template.jpg exists.');
+            alert('Failed to load template. Please check if the template file exists.');
             
             generateBtn.innerHTML = originalText;
             generateBtn.disabled = false;
         };
         
-        templateImg.src = 'assets/template.jpg';
+        const templatePath = getTemplatePath(currentGraphic.role);
+        templateImg.src = templatePath;
         
     } catch (error) {
         console.error('Badge generation failed:', error);
@@ -274,12 +308,33 @@ function drawUserPhoto(ctx, userImg) {
 
 function drawUserText(ctx) {
     const nameConfig = TEMPLATE_CONFIG.userName;
-    ctx.fillStyle = nameConfig.color;
-    ctx.font = nameConfig.font;
-    ctx.textAlign = nameConfig.align;
     
-    console.log(`Drawing name "${currentGraphic.name}" at: x=${nameConfig.x}, y=${nameConfig.y}`);
-    drawWrappedText(ctx, currentGraphic.name, nameConfig);
+    // Set text color based on role
+    if (currentGraphic.role === 'speaker') {
+        ctx.fillStyle = '#FFFFFF'; // White for Speaker
+    } else {
+        ctx.fillStyle = '#000000'; // Black for Attendee and Team
+    }
+    
+    // Wait for fonts to be ready before rendering
+    document.fonts.ready.then(() => {
+        ctx.font = nameConfig.font;
+        ctx.textAlign = nameConfig.align;
+        
+        const uppercaseName = currentGraphic.name.toUpperCase();
+        console.log(`Drawing name "${uppercaseName}" at: x=${nameConfig.x}, y=${nameConfig.y}`);
+        console.log(`Using font: ${ctx.font}`);
+        drawWrappedText(ctx, uppercaseName, nameConfig);
+    }).catch(() => {
+        // Fallback if fonts.ready fails
+        ctx.font = nameConfig.font;
+        ctx.textAlign = nameConfig.align;
+        
+        const uppercaseName = currentGraphic.name.toUpperCase();
+        console.log(`Drawing name "${uppercaseName}" at: x=${nameConfig.x}, y=${nameConfig.y}`);
+        console.log(`Using font: ${ctx.font}`);
+        drawWrappedText(ctx, uppercaseName, nameConfig);
+    });
 }
 
 function drawWrappedText(ctx, text, config) {
@@ -328,10 +383,75 @@ function downloadCanvas(canvas) {
         
         console.log('✅ Badge downloaded successfully');
         
+        // Clear all form inputs after successful download with a small delay
+        setTimeout(() => {
+            clearAllInputs();
+        }, 1500); // 1.5 second delay to show success state
+        
     } catch (error) {
         console.error('Download failed:', error);
         alert('Failed to download badge. Please try again.');
     }
+}
+
+function clearAllInputs() {
+    // Add fade out effect to form
+    const formOverlay = document.querySelector('.glossy-form-overlay');
+    if (formOverlay) {
+        formOverlay.style.opacity = '0.7';
+        formOverlay.style.transition = 'opacity 0.3s ease';
+    }
+    
+    setTimeout(() => {
+        // Clear name input
+        const nameInput = document.getElementById('name');
+        if (nameInput) {
+            nameInput.value = '';
+        }
+        
+        // Reset role selection to default
+        const roleSelect = document.getElementById('role');
+        if (roleSelect) {
+            roleSelect.value = 'attendee';
+        }
+        
+        // Clear photo input and preview
+        const photoInput = document.getElementById('photo');
+        const photoPreview = document.getElementById('photo-preview');
+        const fileUploadArea = document.getElementById('file-upload-area');
+        
+        if (photoInput) {
+            photoInput.value = '';
+        }
+        
+        if (photoPreview) {
+            photoPreview.style.display = 'none';
+            photoPreview.innerHTML = '';
+        }
+        
+        if (fileUploadArea) {
+            fileUploadArea.style.display = 'block';
+        }
+        
+        // Reset user photo data
+        userPhotoData = null;
+        currentGraphic = null;
+        
+        // Reset button state
+        const generateBtn = document.querySelector('.generate-btn');
+        if (generateBtn) {
+            generateBtn.innerHTML = '<i class="fas fa-download"></i> Generate My Badge';
+            generateBtn.disabled = false;
+            generateBtn.style.background = '';
+        }
+        
+        // Fade back in
+        if (formOverlay) {
+            formOverlay.style.opacity = '1';
+        }
+        
+        console.log('✅ Form cleared successfully');
+    }, 200); // Small delay for smooth transition
 }
 
 function validateForm() {
