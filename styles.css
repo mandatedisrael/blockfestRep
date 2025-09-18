@@ -397,6 +397,24 @@ body::after {
     font-style: italic;
 }
 
+.zeropulse-link {
+    color: rgba(59, 130, 246, 0.8);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.zeropulse-link:hover {
+    color: rgba(59, 130, 246, 1);
+    text-decoration: underline;
+    transform: translateY(-1px);
+}
+
+.zeropulse-link:active {
+    transform: translateY(0);
+}
+
 /* Hidden Badge for Generation */
 .hidden-badge {
     position: absolute;
