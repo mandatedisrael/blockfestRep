@@ -4,22 +4,22 @@ let userPhotoData = null;
 
 const TEMPLATE_CONFIG = {
     userPhoto: {
-        x: 180,       
-        y: 395,        
-        width: 450,    
-        height: 450,   
+        x: 110,       
+        y: 344,        
+        width: 575,    
+        height: 568,   
         style: 'rounded', 
         borderRadius: 30
     },
     userName: {
-        x: 175,        
-        y: 970,        
+        x: 105,        
+        y: 1050,        
         font: 'bold 80px Bebas Neue',
         color: '#000000',
         align: 'left',
         maxWidth: 800,
         maxHeight: 120,
-        lineHeight: 65
+        lineHeight: 70
     },
 }
 
@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeApp() {
     setupFileUpload();
     preloadFonts();
-    console.log('✅ Badge generator initialized');
 }
 
 function preloadFonts() {
@@ -45,13 +44,12 @@ function preloadFonts() {
     fontLink.href = 'https://fonts.gstatic.com/s/bebasneue/v14/JTUSjIg69CK48gW7PXoo9Wlhyw.woff2';
     document.head.appendChild(fontLink);
     
-    // Also try to load the font programmatically
+    // Load the font programmatically
     const font = new FontFace('Bebas Neue', 'url(https://fonts.gstatic.com/s/bebasneue/v14/JTUSjIg69CK48gW7PXoo9Wlhyw.woff2)');
     font.load().then(() => {
         document.fonts.add(font);
-        console.log('✅ Bebas Neue font loaded successfully');
     }).catch((error) => {
-        console.warn('⚠️ Could not load Bebas Neue font:', error);
+        console.warn('Could not load Bebas Neue font:', error);
     });
 }
 
@@ -141,7 +139,6 @@ function updatePreview() {
         photo: userPhotoData
     };
     
-    console.log('Preview updated:', currentGraphic);
 }
 
 function generateAndDownload() {
@@ -159,13 +156,12 @@ function generateAndDownload() {
         photo: userPhotoData
     };
     
-    console.log('Generating badge for:', currentGraphic);
     
     generateBadgeWithTemplate();
 }
 
 function getTemplatePath() {
-    return 'assets/Attendee.jpg';
+    return 'assets/template.jpg';
 }
 
 function generateBadgeWithTemplate() {
@@ -184,7 +180,6 @@ function generateBadgeWithTemplate() {
             canvas.width = templateImg.width;
             canvas.height = templateImg.height;
             
-            console.log(`Canvas size: ${canvas.width}x${canvas.height}`);
             
             ctx.drawImage(templateImg, 0, 0);
             
@@ -252,7 +247,6 @@ function addUserDataToCanvas(ctx, canvas, callback) {
 function drawUserPhoto(ctx, userImg) {
     const config = TEMPLATE_CONFIG.userPhoto;
     
-    console.log(`Drawing photo at: x=${config.x}, y=${config.y}, size=${config.width}x${config.height}`);
     
     ctx.save();
     
@@ -277,13 +271,16 @@ function drawUserPhoto(ctx, userImg) {
         ctx.clip();
     }
     
+    // Use cover scaling to completely fill the frame (no gaps)
     const scale = Math.max(config.width / userImg.width, config.height / userImg.height);
     const scaledWidth = userImg.width * scale;
     const scaledHeight = userImg.height * scale;
     
+    // Center the scaled image to completely fill the frame
     const drawX = config.x + (config.width - scaledWidth) / 2;
     const drawY = config.y + (config.height - scaledHeight) / 2;
     
+    // Draw the image to completely fill the navy blue frame
     ctx.drawImage(userImg, drawX, drawY, scaledWidth, scaledHeight);
     
     ctx.restore();
@@ -292,26 +289,33 @@ function drawUserPhoto(ctx, userImg) {
 function drawUserText(ctx) {
     const nameConfig = TEMPLATE_CONFIG.userName;
     
-    // Set text color to black for the default template
-    ctx.fillStyle = '#000000';
+    // Set text color to deep navy blue
+    ctx.fillStyle = nameConfig.color;
     
-    // Wait for fonts to be ready before rendering
-    document.fonts.ready.then(() => {
-        ctx.font = nameConfig.font;
+    // Add text stroke for better visibility
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 3;
+    
+    // Set up font with fallback
+    const fontString = `${nameConfig.font}, Arial, sans-serif`;
+    ctx.font = fontString;
+    ctx.textAlign = nameConfig.align;
+    
+    const uppercaseName = currentGraphic.name.toUpperCase();
+    
+    // Try to wait for fonts, but don't block if it takes too long
+    const fontPromise = document.fonts.ready;
+    const timeoutPromise = new Promise(resolve => setTimeout(resolve, 1000)); // 1 second timeout
+    
+    Promise.race([fontPromise, timeoutPromise]).then(() => {
+        // Re-apply font after potential loading
+        ctx.font = fontString;
         ctx.textAlign = nameConfig.align;
         
-        const uppercaseName = currentGraphic.name.toUpperCase();
-        console.log(`Drawing name "${uppercaseName}" at: x=${nameConfig.x}, y=${nameConfig.y}`);
-        console.log(`Using font: ${ctx.font}`);
         drawWrappedText(ctx, uppercaseName, nameConfig);
-    }).catch(() => {
-        // Fallback if fonts.ready fails
-        ctx.font = nameConfig.font;
-        ctx.textAlign = nameConfig.align;
-        
-        const uppercaseName = currentGraphic.name.toUpperCase();
-        console.log(`Drawing name "${uppercaseName}" at: x=${nameConfig.x}, y=${nameConfig.y}`);
-        console.log(`Using font: ${ctx.font}`);
+    }).catch((error) => {
+        console.error('Font loading failed:', error);
+        // Fallback - just draw with current font
         drawWrappedText(ctx, uppercaseName, nameConfig);
     });
 }
@@ -321,7 +325,9 @@ function drawWrappedText(ctx, text, config) {
     const lines = [];
     let currentLine = '';
     
-    ctx.font = config.font;
+    // Ensure font is set
+    const fontString = `${config.font}, Arial, sans-serif`;
+    ctx.font = fontString;
     
     for (let i = 0; i < words.length; i++) {
         const testLine = currentLine + (currentLine ? ' ' : '') + words[i];
@@ -345,9 +351,13 @@ function drawWrappedText(ctx, text, config) {
             break;
         }
         
+        // Draw stroke first for outline effect (thicker for better visibility)
+        ctx.strokeText(lines[i], config.x, y);
+        // Then draw fill text
         ctx.fillText(lines[i], config.x, y);
         y += config.lineHeight;
     }
+    
 }
 
 function downloadCanvas(canvas) {
@@ -360,7 +370,6 @@ function downloadCanvas(canvas) {
         link.click();
         document.body.removeChild(link);
         
-        console.log('✅ Badge downloaded successfully');
         
         // Clear all form inputs after successful download with a small delay
         setTimeout(() => {
@@ -423,7 +432,6 @@ function clearAllInputs() {
             formOverlay.style.opacity = '1';
         }
         
-        console.log('✅ Form cleared successfully');
     }, 200); // Small delay for smooth transition
 }
 
@@ -489,15 +497,3 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
-
-function debugPositions() {
-    console.log('=== TEMPLATE CONFIGURATION ===');
-    console.log('User Photo:', TEMPLATE_CONFIG.userPhoto);
-    console.log('Top Name:', TEMPLATE_CONFIG.userName);
-    console.log('Top Role:', TEMPLATE_CONFIG.userRole);
-    console.log('Bottom Name:', TEMPLATE_CONFIG.bottomName);
-    console.log('Bottom Role:', TEMPLATE_CONFIG.bottomRole);
-    console.log('================================');
-}
-
-window.addEventListener('load', debugPositions);
