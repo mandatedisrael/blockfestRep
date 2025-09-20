@@ -35,7 +35,6 @@ function initializeApp() {
 }
 
 function preloadFonts() {
-    // Preload Bebas Neue font to ensure it's available for canvas rendering
     const fontLink = document.createElement('link');
     fontLink.rel = 'preload';
     fontLink.as = 'font';
@@ -44,7 +43,6 @@ function preloadFonts() {
     fontLink.href = 'https://fonts.gstatic.com/s/bebasneue/v14/JTUSjIg69CK48gW7PXoo9Wlhyw.woff2';
     document.head.appendChild(fontLink);
     
-    // Load the font programmatically
     const font = new FontFace('Bebas Neue', 'url(https://fonts.gstatic.com/s/bebasneue/v14/JTUSjIg69CK48gW7PXoo9Wlhyw.woff2)');
     font.load().then(() => {
         document.fonts.add(font);
@@ -271,16 +269,13 @@ function drawUserPhoto(ctx, userImg) {
         ctx.clip();
     }
     
-    // Use cover scaling to completely fill the frame (no gaps)
     const scale = Math.max(config.width / userImg.width, config.height / userImg.height);
     const scaledWidth = userImg.width * scale;
     const scaledHeight = userImg.height * scale;
     
-    // Center the scaled image to completely fill the frame
     const drawX = config.x + (config.width - scaledWidth) / 2;
     const drawY = config.y + (config.height - scaledHeight) / 2;
     
-    // Draw the image to completely fill the navy blue frame
     ctx.drawImage(userImg, drawX, drawY, scaledWidth, scaledHeight);
     
     ctx.restore();
@@ -289,33 +284,27 @@ function drawUserPhoto(ctx, userImg) {
 function drawUserText(ctx) {
     const nameConfig = TEMPLATE_CONFIG.userName;
     
-    // Set text color to deep navy blue
     ctx.fillStyle = nameConfig.color;
     
-    // Add text stroke for better visibility
     ctx.strokeStyle = '#FFFFFF';
     ctx.lineWidth = 3;
     
-    // Set up font with fallback
     const fontString = `${nameConfig.font}, Arial, sans-serif`;
     ctx.font = fontString;
     ctx.textAlign = nameConfig.align;
     
     const uppercaseName = currentGraphic.name.toUpperCase();
     
-    // Try to wait for fonts, but don't block if it takes too long
     const fontPromise = document.fonts.ready;
     const timeoutPromise = new Promise(resolve => setTimeout(resolve, 1000)); // 1 second timeout
     
     Promise.race([fontPromise, timeoutPromise]).then(() => {
-        // Re-apply font after potential loading
         ctx.font = fontString;
         ctx.textAlign = nameConfig.align;
         
         drawWrappedText(ctx, uppercaseName, nameConfig);
     }).catch((error) => {
         console.error('Font loading failed:', error);
-        // Fallback - just draw with current font
         drawWrappedText(ctx, uppercaseName, nameConfig);
     });
 }
@@ -325,7 +314,6 @@ function drawWrappedText(ctx, text, config) {
     const lines = [];
     let currentLine = '';
     
-    // Ensure font is set
     const fontString = `${config.font}, Arial, sans-serif`;
     ctx.font = fontString;
     
@@ -351,9 +339,7 @@ function drawWrappedText(ctx, text, config) {
             break;
         }
         
-        // Draw stroke first for outline effect (thicker for better visibility)
         ctx.strokeText(lines[i], config.x, y);
-        // Then draw fill text
         ctx.fillText(lines[i], config.x, y);
         y += config.lineHeight;
     }
@@ -371,7 +357,6 @@ function downloadCanvas(canvas) {
         document.body.removeChild(link);
         
         
-        // Clear all form inputs after successful download with a small delay
         setTimeout(() => {
             clearAllInputs();
         }, 1500); // 1.5 second delay to show success state
@@ -383,7 +368,6 @@ function downloadCanvas(canvas) {
 }
 
 function clearAllInputs() {
-    // Add fade out effect to form
     const formOverlay = document.querySelector('.glossy-form-overlay');
     if (formOverlay) {
         formOverlay.style.opacity = '0.7';
@@ -391,13 +375,11 @@ function clearAllInputs() {
     }
     
     setTimeout(() => {
-        // Clear name input
         const nameInput = document.getElementById('name');
         if (nameInput) {
             nameInput.value = '';
         }
         
-        // Clear photo input and preview
         const photoInput = document.getElementById('photo');
         const photoPreview = document.getElementById('photo-preview');
         const fileUploadArea = document.getElementById('file-upload-area');
@@ -415,11 +397,9 @@ function clearAllInputs() {
             fileUploadArea.style.display = 'block';
         }
         
-        // Reset user photo data
         userPhotoData = null;
         currentGraphic = null;
         
-        // Reset button state
         const generateBtn = document.querySelector('.generate-btn');
         if (generateBtn) {
             generateBtn.innerHTML = '<i class="fas fa-download"></i> Generate My Badge';
@@ -427,12 +407,11 @@ function clearAllInputs() {
             generateBtn.style.background = '';
         }
         
-        // Fade back in
         if (formOverlay) {
             formOverlay.style.opacity = '1';
         }
         
-    }, 200); // Small delay for smooth transition
+    }, 200);
 }
 
 function validateForm() {

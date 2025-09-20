@@ -1,6 +1,4 @@
-/* ===== CLEAN MINIMAL BADGE GENERATOR ===== */
 
-/* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -15,7 +13,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Subtle Background Pattern */
 body::before {
     content: '';
     position: fixed;
@@ -48,7 +45,6 @@ body::after {
     to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* Enhanced Logo at Top */
 .logo-container {
     position: absolute;
     top: 40px;
@@ -92,7 +88,6 @@ body::after {
     line-height: 1.4;
 }
 
-/* Main Form Container */
 .form-container {
     display: flex;
     justify-content: center;
@@ -103,7 +98,6 @@ body::after {
     z-index: 10;
 }
 
-/* Modern Navy Blue Form Overlay */
 .glossy-form-overlay {
     background: rgba(30, 41, 59, 0.95);
     backdrop-filter: blur(20px) saturate(180%);
@@ -224,7 +218,6 @@ body::after {
     padding: 10px;
 }
 
-/* Enhanced File Upload Area */
 .file-upload-area {
     border: 2px dashed rgba(59, 130, 246, 0.4);
     border-radius: 16px;
@@ -318,7 +311,6 @@ body::after {
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
-/* Enhanced Generate Button */
 .generate-btn {
     width: 100%;
     background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 50%, #1e293b 100%);
@@ -381,7 +373,6 @@ body::after {
     background: linear-gradient(135deg, #475569 0%, #334155 50%, #1e293b 100%);
 }
 
-/* Form Footer */
 .form-footer {
     text-align: center;
     margin-top: 24px;
@@ -415,7 +406,6 @@ body::after {
     transform: translateY(0);
 }
 
-/* Hidden Badge for Generation */
 .hidden-badge {
     position: absolute;
     left: -9999px;
@@ -440,7 +430,6 @@ body::after {
     border-radius: 20px;
 }
 
-/* User Photo Overlay */
 .user-photo-overlay {
     position: absolute;
     top: 35%;
@@ -476,7 +465,6 @@ body::after {
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* User Name Overlay */
 .user-name-overlay {
     position: absolute;
     top: 42%;
@@ -496,7 +484,6 @@ body::after {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* User Role Overlay */
 .user-role-overlay {
     position: absolute;
     top: 48%;
@@ -517,7 +504,6 @@ body::after {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Decorative Elements */
 .decorative-elements {
     position: fixed;
     top: 0;
@@ -587,7 +573,6 @@ body::after {
     }
 }
 
-/* Footer Pattern */
 .footer-pattern {
     position: fixed;
     bottom: 0;
@@ -602,9 +587,7 @@ body::after {
     display: block;
 }
 
-/* ===== ENHANCED RESPONSIVE DESIGN ===== */
 
-/* Large Desktop (1400px and up) */
 @media (min-width: 1400px) {
     .form-container {
         padding: 200px 40px 280px;
@@ -665,7 +648,6 @@ body::after {
     }
 }
 
-/* Large Desktop (1200px - 1399px) */
 @media (min-width: 1200px) and (max-width: 1399px) {
     .form-container {
         padding: 180px 30px 250px;
@@ -693,7 +675,6 @@ body::after {
     }
 }
 
-/* Desktop (992px - 1199px) */
 @media (min-width: 992px) and (max-width: 1199px) {
     .form-container {
         padding: 160px 25px 230px;
@@ -748,7 +729,6 @@ body::after {
     }
 }
 
-/* Tablet Landscape (768px - 991px) */
 @media (min-width: 768px) and (max-width: 991px) {
     .logo-container {
         top: 35px;
@@ -815,7 +795,6 @@ body::after {
     }
 }
 
-/* Tablet Portrait (576px - 767px) */
 @media (min-width: 576px) and (max-width: 767px) {
     .logo-container {
         top: 28px;
@@ -886,7 +865,6 @@ body::after {
     }
 }
 
-/* Mobile Landscape (480px - 575px) */
 @media (min-width: 480px) and (max-width: 575px) {
     .logo-container {
         top: 22px;
@@ -957,7 +935,6 @@ body::after {
     }
 }
 
-/* Mobile Portrait (320px - 479px) */
 @media (min-width: 320px) and (max-width: 479px) {
     .logo-container {
         top: 18px;
@@ -1034,7 +1011,6 @@ body::after {
     }
 }
 
-/* Extra Small Mobile (below 320px) */
 @media (max-width: 319px) {
     .logo-container {
         top: 12px;
@@ -1109,12 +1085,11 @@ body::after {
     }
 }
 
-/* Touch Device Optimizations */
 @media (hover: none) and (pointer: coarse) {
     .form-group input,
     .form-group select,
     .generate-btn {
-        min-height: 48px; /* Minimum touch target size */
+        min-height: 48px;
     }
     
     .file-upload-area {
@@ -1122,7 +1097,7 @@ body::after {
     }
     
     .generate-btn:hover {
-        transform: none; /* Disable hover effects on touch devices */
+        transform: none;
     }
     
     .file-upload-area:hover {
@@ -1130,7 +1105,6 @@ body::after {
         background: rgba(30, 41, 59, 0.8);
     }
     
-    /* Enhanced touch feedback */
     .generate-btn:active {
         transform: scale(0.98);
         transition: transform 0.1s ease;
@@ -1141,13 +1115,11 @@ body::after {
         transition: transform 0.1s ease;
     }
     
-    /* Ensure proper touch targets */
     .form-group input,
     .form-group select {
-        font-size: 16px; /* Prevent zoom on iOS */
+        font-size: 16px;
     }
     
-    /* Improve spacing for touch */
     .form-content {
         gap: 24px;
     }
@@ -1159,7 +1131,6 @@ body::after {
     }
 }
 
-/* High DPI / Retina Display Optimizations */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .logo-text,
     .pattern-image {
@@ -1168,7 +1139,6 @@ body::after {
     }
 }
 
-/* Landscape Orientation Optimizations */
 @media (orientation: landscape) and (max-height: 600px) {
     .logo-container {
         top: 12px;
@@ -1225,9 +1195,7 @@ body::after {
     }
 }
 
-/* Additional Responsive Enhancements */
 
-/* Very Large Screens (1600px+) */
 @media (min-width: 1600px) {
     .form-container {
         padding: 200px 60px 300px;
@@ -1252,7 +1220,6 @@ body::after {
     }
 }
 
-/* Medium Laptop (1024px - 1199px) */
 @media (min-width: 1024px) and (max-width: 1199px) {
     .form-container {
         padding: 150px 30px 240px;
@@ -1272,7 +1239,6 @@ body::after {
     }
 }
 
-/* Small Laptop (992px - 1023px) */
 @media (min-width: 992px) and (max-width: 1023px) {
     .form-container {
         padding: 140px 25px 230px;
@@ -1292,7 +1258,6 @@ body::after {
     }
 }
 
-/* Large Mobile (414px - 479px) - iPhone Plus/Max */
 @media (min-width: 414px) and (max-width: 479px) {
     .form-container {
         padding: 95px 18px 145px;
@@ -1317,7 +1282,6 @@ body::after {
     }
 }
 
-/* Medium Mobile (375px - 413px) - iPhone X/11/12 */
 @media (min-width: 375px) and (max-width: 413px) {
     .form-container {
         padding: 92px 16px 142px;
@@ -1338,7 +1302,6 @@ body::after {
     }
 }
 
-/* Small Mobile (360px - 374px) - iPhone 6/7/8 */
 @media (min-width: 360px) and (max-width: 374px) {
     .form-container {
         padding: 90px 15px 140px;
@@ -1359,7 +1322,6 @@ body::after {
     }
 }
 
-/* Very Small Mobile (320px - 359px) */
 @media (min-width: 320px) and (max-width: 359px) {
     .form-container {
         padding: 88px 12px 138px;
@@ -1384,7 +1346,6 @@ body::after {
     }
 }
 
-/* Print Styles */
 @media print {
     .form-container,
     .glossy-form-overlay,
