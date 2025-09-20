@@ -4,20 +4,20 @@ let userPhotoData = null;
 
 const TEMPLATE_CONFIG = {
     userPhoto: {
-        x: 110,       
-        y: 344,        
-        width: 575,    
-        height: 568,   
+        x: 225,       
+        y: 685,        
+        width: 1140,    
+        height: 1140,   
         style: 'rounded', 
-        borderRadius: 30
+        borderRadius: 60
     },
     userName: {
-        x: 105,        
-        y: 1050,        
-        font: 'bold 80px Bebas Neue',
+        x: 1450,        
+        y: 900,        
+        font: 'bold 180px Bebas Neue',
         color: '#000000',
         align: 'left',
-        maxWidth: 800,
+        maxWidth: 2000,
         maxHeight: 120,
         lineHeight: 70
     },
