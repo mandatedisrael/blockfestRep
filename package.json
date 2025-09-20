@@ -18,7 +18,10 @@
     "event",
     "attending"
   ],
-  "author": "Blockfest Africa 2025",
+  "author": {
+    "name": "Dami Notmartin",
+    "url": "https://x.com/Damiclone"
+  },
   "license": "MIT",
   "devDependencies": {
     "live-server": "^1.2.2"
